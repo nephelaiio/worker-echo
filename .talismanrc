@@ -1,0 +1,7 @@
+fileignoreconfig:
+  - filename: package-lock.json
+    ignore_detectors: [filecontent]
+  - filename: .env
+    ignore_detectors: [filecontent,filename]
+  - filename: env.config.capnp
+    ignore_detectors: [filecontent,filename]

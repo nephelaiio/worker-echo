@@ -1,0 +1,22 @@
+{
+	"name": "worker-echo",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20230419.0",
+		"@types/node": "^20.5.4",
+		"@typescript-eslint/eslint-plugin": "^6.4.1",
+		"esbuild": "^0.19.2",
+		"eslint": "^8.47.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-standard-with-typescript": "^38.0.0",
+		"eslint-plugin-import": "^2.28.1",
+		"eslint-plugin-n": "^16.0.2",
+		"eslint-plugin-promise": "^6.1.1",
+		"nodemon": "^3.0.1",
+		"prettier": "^3.0.2",
+		"typescript": "^5.1.6",
+		"wrangler": "^3.0.0"
+	}
+}
