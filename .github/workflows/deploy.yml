@@ -37,9 +37,6 @@ jobs:
       - name: Install utilities
         run: sudo apt-get install -y jq httpie
 
-      - name: Build project
-        run: npm run build --production
-
       - name: Set worker name envvar
         run: echo "WORKER=${REPOSITORY/$OWNER\//}-${BRANCH}-${GITHUB_WORKFLOW}" >> $GITHUB_ENV
 
@@ -50,9 +47,10 @@ jobs:
         uses: mathiasvr/command-output@v2.0.0
         with:
           run: |
-            npm run deploy -- \
+            npx @nephelaiio/worker-deploy deploy -- \
               --verbose \
               --name "$WORKER"
+              --fqdn "$FQDN/*"
         id: deploy
 
       - name: Test deployed Cloudflare worker

@@ -1,5 +1,3 @@
-import type { Request as NodeRequest } from 'http';
-
 type WorkerRequest = Request;
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type EchoResponse = {
@@ -69,8 +67,8 @@ async function worker(request: WorkerRequest): Promise<EchoResponse> {
 				verifiedBot: cfInfo.botManagement.verifiedBot,
 				static_resource: cfInfo.botManagement.static_resource,
 				ja3Hash: cfInfo.botManagement.ja3Hash,
-				detectionIds: cfInfo.botManagement.detectionIds
-			}
+				detectionIds: cfInfo.botManagement.detectionIds,
+			},
 		};
 	}
 	const cloudflare = {
@@ -93,7 +91,7 @@ async function worker(request: WorkerRequest): Promise<EchoResponse> {
 			region: cfInfo.region ?? undefined,
 			regionCode: cfInfo.regionCode ?? undefined,
 			timezone: cfInfo.timezone,
-		}
+		},
 	};
 
 	const response = {
@@ -110,7 +108,7 @@ async function worker(request: WorkerRequest): Promise<EchoResponse> {
 		headers,
 		params,
 		body,
-		cloudflare
+		cloudflare,
 	};
 
 	if (isWebsocket) {
