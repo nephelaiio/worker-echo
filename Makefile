@@ -10,7 +10,7 @@ WORKERD_OUTPUT=${BUILD_DIR}/worker
 .PHONY: build dev lint format workerd
 
 lint:
-	npx -y prettier --check . &&
+	npx -y prettier --check . && \
 	npx -y eslint . --ext .ts,.tsx
 
 format:
