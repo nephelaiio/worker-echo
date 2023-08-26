@@ -1,5 +1,3 @@
-import type { Request as NodeRequest } from 'http';
-
 type WorkerRequest = Request;
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type EchoResponse = {
