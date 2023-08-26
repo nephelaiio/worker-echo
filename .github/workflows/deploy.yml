@@ -43,6 +43,9 @@ jobs:
       - name: Set worker fqdn envvar
         run: echo "FQDN=echo.${CUSTOM_DOMAIN}" >> $GITHUB_ENV
 
+      - name: Build project config files
+        run: make config
+
       - name: Deploy Cloudflare Worker
         uses: mathiasvr/command-output@v2.0.0
         with:
