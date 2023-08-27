@@ -50,7 +50,7 @@ jobs:
             npx @nephelaiio/worker-deploy deploy \
               --verbose \
               --name "$WORKER" \
-              --fqdn "$FQDN/*"
+              --route "$FQDN/*"
         id: deploy
 
       - name: Verify deployed Cloudflare worker
