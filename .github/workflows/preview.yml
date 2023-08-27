@@ -18,7 +18,7 @@ env:
 
 jobs:
   preview:
-    if: github.event.action != closed
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -61,7 +61,7 @@ jobs:
           ${{ steps.deploy.outputs.stdout }}
 
   cleanup:
-    if: github.event.action == closed
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
