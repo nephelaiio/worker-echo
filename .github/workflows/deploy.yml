@@ -52,7 +52,7 @@ jobs:
           run: |
             npx @nephelaiio/worker-deploy deploy -- \
               --verbose \
-              --name "$WORKER"
+              --name "$WORKER" \
               --fqdn "$FQDN/*"
         id: deploy
 
