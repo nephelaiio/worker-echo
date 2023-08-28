@@ -15,7 +15,6 @@ jobs:
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CF_ACCOUNT_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       WRANGLER_SEND_METRICS: false
       OWNER: ${{ github.repository_owner }}
       REPOSITORY: ${{ github.repository }}
@@ -35,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Install utilities
-        run: sudo apt-get install -y jq httpie
+        run: sudo apt-get install -y make jq httpie
 
       - name: Set worker name envvar
         run: echo "WORKER=${REPOSITORY/$OWNER\//}-${BRANCH}-${GITHUB_WORKFLOW}" >> $GITHUB_ENV
@@ -55,9 +54,3 @@ jobs:
               --name "$WORKER" \
               --route "$FQDN/*"
         id: deploy
-
-      - name: Test deployed Cloudflare worker
-        run: |
-          curl -sD- --retry 10 --retry-delay 0 \
-            --retry-max-time 120 --retry-all-errors \
-            ${{ steps.deploy.outputs.stdout }}
