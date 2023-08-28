@@ -7,7 +7,7 @@ WORKERD_BIN=${BUILD_DIR}/workerd
 WORKERD_RELEASE=latest
 WORKERD_OUTPUT=${BUILD_DIR}/worker
 
-.PHONY: build dev lint format workerd
+.PHONY: build dev lint format workerd config
 
 lint:
 	npx -y prettier --check . && \
@@ -36,6 +36,8 @@ ${WORKERD_BIN}:
 	xargs curl -o ${WORKERD_BIN}.gz -sL && \
 	gzip -fd ${WORKERD_BIN}.gz && \
 	chmod +x ${WORKERD_BIN}
+
+config: wrangler.toml config.capnp
 
 wrangler.toml: env.wrangler.toml
 	envsubst < $< > $@

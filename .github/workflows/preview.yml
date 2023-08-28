@@ -1,0 +1,93 @@
+---
+name: preview
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CF_ACCOUNT_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  WRANGLER_SEND_METRICS: false
+  OWNER: ${{ github.repository_owner }}
+  REPOSITORY: ${{ github.repository }}
+  BRANCH: ${{ github.head_ref }}
+  CUSTOM_DOMAIN: nephelai.io
+
+jobs:
+  preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install utilities
+        run: sudo apt-get install -y make jq httpie
+
+      - name: Set worker name envvar
+        run: echo "WORKER=${REPOSITORY/$OWNER\//}-${BRANCH}-${GITHUB_WORKFLOW}" >> $GITHUB_ENV
+
+      - name: Set worker fqdn envvar
+        run: echo "FQDN=${WORKER}.${CUSTOM_DOMAIN}" >> $GITHUB_ENV
+
+      - name: Build project config files
+        run: make config
+
+      - name: Deploy Cloudflare Worker
+        uses: mathiasvr/command-output@v2.0.0
+        with:
+          run: |
+            npx @nephelaiio/worker-deploy deploy \
+              --verbose \
+              --name "$WORKER" \
+              --route "$FQDN/*"
+        id: deploy
+
+      - name: Verify deployed Cloudflare worker
+        run: |
+          curl -sD- --retry 10 --retry-delay 0 \
+            --retry-max-time 120 --retry-all-errors \
+            ${{ steps.deploy.outputs.stdout }}
+
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install utilities
+        run: sudo apt-get install -y make jq httpie
+
+      - name: Set worker name envvar
+        run: echo "WORKER=${REPOSITORY/$OWNER\//}-${BRANCH}-${GITHUB_WORKFLOW}" >> $GITHUB_ENV
+
+      - name: Set worker fqdn envvar
+        run: echo "FQDN=echo.${CUSTOM_DOMAIN}" >> $GITHUB_ENV
+
+      - name: Build project config files
+        run: make config
+
+      - name: Deploy Cloudflare Worker
+        uses: mathiasvr/command-output@v2.0.0
+        with:
+          run: npx @nephelaiio/worker-deploy delete --name "$WORKER"
