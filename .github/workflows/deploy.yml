@@ -49,7 +49,7 @@ jobs:
       - name: Deploy Cloudflare Worker
         uses: mathiasvr/command-output@v2.0.0
         with:
-          run: >-
+          run: >
             npx @nephelaiio/worker-deploy deploy
               --verbose
               --name "$WORKER"
@@ -57,7 +57,7 @@ jobs:
         id: deploy
 
       - name: Test deployed Cloudflare worker
-        run: >-
+        run: >
           curl -sD- --retry 10 --retry-delay 0
-          --retry-max-time 120 --retry-all-errors
-          ${{ steps.deploy.outputs.stdout }}
+            --retry-max-time 120 --retry-all-errors
+            ${{ steps.deploy.outputs.stdout }}
